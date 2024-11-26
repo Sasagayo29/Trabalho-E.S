@@ -7,6 +7,30 @@ typedef struct NOH
     struct NOH *prox;
 } NOH;
 
+int insere_pos(NOH **lista, int indice, const char *nome)
+{
+    NOH *aux = *lista;
+    NOH *novo = malloc(sizeof(NOH));
+    novo->nome = malloc(strlen(nome) + 1);
+    strcpy(novo->nome, nome);
+
+    if (indice == 0)
+    {
+        novo->prox = *lista;
+        *lista = novo;
+        return 1;
+    }
+
+    while (aux->prox != NULL && indice > 1)
+    {
+        indice--;
+        aux = aux->prox;
+    }
+    novo->prox = aux->prox;
+    aux->prox = novo;
+    return 1;
+}
+
 void imprime(NOH* lista){
 
     if(lista==NULL)
@@ -38,7 +62,12 @@ int main()
         {
         case 1:
             printf("Digite o nome a ser inserido: ");
-            scanf("%s",lista->nome);
+            fgets(nome, sizeof(nome), stdin);
+            nome[strcspn(nome, "\n")] = '\0'; // Remover o caractere de nova linha
+            printf("Digite a posição para inserir (0 para início): ");
+            scanf("%d", &pos);
+            getchar();
+            insere_pos(&lista, pos, nome);
 
             break;
         case 2:
