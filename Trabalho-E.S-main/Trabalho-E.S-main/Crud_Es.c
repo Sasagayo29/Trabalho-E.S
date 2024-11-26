@@ -41,6 +41,37 @@ void imprime(NOH* lista){
             lista=lista->prox;
     }
 }
+int remove_valor(NOH** lista, const char* buscado) {
+    if (*lista == NULL) {
+        printf("Lista vazia\n");
+        return -1;
+    }
+
+    if (strcmp((*lista)->nome, buscado) == 0) {
+        NOH* tmp = *lista;
+        *lista = (*lista)->prox;
+        free(tmp->nome);
+        free(tmp);
+        return 1;
+    }
+
+    NOH* atual = *lista;
+    NOH* penultimo = NULL;
+    while (atual != NULL && strcmp(atual->nome, buscado) != 0) {
+        penultimo = atual;
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) {
+        printf("Elemento %s não encontrado.\n", buscado);
+        return -1;
+    }
+
+    penultimo->prox = atual->prox;
+    free(atual->nome);
+    free(atual);
+    return 1;
+}
 int main()
 {
     NOH *lista = NULL;
@@ -80,7 +111,9 @@ int main()
             break;
         case 4:
             printf("Digite o nome a ser removido: ");
-            scanf("%s",lista->nome);
+            fgets(nome, sizeof(nome), stdin);
+            nome[strcspn(nome, "\n")] = '\0';
+            remove_valor(&lista, nome);
             break;
         case 5:
             printf("Saindo...\n");
