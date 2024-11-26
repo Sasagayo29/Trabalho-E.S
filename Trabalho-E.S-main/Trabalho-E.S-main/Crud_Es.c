@@ -7,12 +7,28 @@ typedef struct NOH
     struct NOH *prox;
 } NOH;
 
+void imprime(NOH* lista){
+
+    if(lista==NULL)
+        printf("Lista Vazia!");
+    else{
+        while(lista->prox!=NULL)
+            printf("%s",lista->nome);
+            lista=lista->prox;
+    }
+
+
+
+
+}
+
 int main()
 {
     NOH *lista = NULL;
     int opcao;
     char nome[50], novo_nome[50];
     int pos;
+
     do
     {
         printf("\n=== MENU ===\n");
@@ -21,32 +37,33 @@ int main()
         printf("3. Atualizar Nome (Update)\n");
         printf("4. Remover Nome (Delete)\n");
         printf("5. Sair\n");
-        printf("Escolha uma opÁ„o: ");
+        printf("Escolha uma op√ß√£o: ");
         scanf("%d", &opcao);
-        getchar(); 
+        getchar();
         switch (opcao)
         {
         case 1:
             printf("Digite o nome a ser inserido: ");
-            fgets(nome, sizeof(nome), stdin);
-      
+            scanf("%s",lista->nome);
+
             break;
         case 2:
             printf("\nLista de nomes:\n");
+            imprime(lista);
             break;
         case 3:
             printf("Digite o nome a ser atualizado: ");
-            fgets(nome, sizeof(nome), stdin);
+            scanf("%s",lista->nome);
             break;
         case 4:
             printf("Digite o nome a ser removido: ");
-            fgets(nome, sizeof(nome), stdin);
+            scanf("%s",lista->nome);
             break;
         case 5:
             printf("Saindo...\n");
             break;
         default:
-            printf("OpÁ„o inv·lida. Tente novamente.\n");
+            printf("Op√ß√£o inv√°lida. Tente novamente.\n");
         }
     } while (opcao != 5);
     return 0;
