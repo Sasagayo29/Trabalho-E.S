@@ -16,19 +16,13 @@ void imprime(NOH* lista){
             printf("%s",lista->nome);
             lista=lista->prox;
     }
-
-
-
-
 }
-
 int main()
 {
     NOH *lista = NULL;
     int opcao;
     char nome[50], novo_nome[50];
     int pos;
-
     do
     {
         printf("\n=== MENU ===\n");
