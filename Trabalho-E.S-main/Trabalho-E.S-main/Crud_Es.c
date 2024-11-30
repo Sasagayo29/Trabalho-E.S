@@ -1,28 +1,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct NOH
-{
+typedef struct NOH{
     char *nome;
     struct NOH *prox;
 } NOH;
-
-int insere_pos(NOH **lista, int indice, const char *nome)
-{
+int insere_pos(NOH **lista, int indice, const char *nome){
     NOH *aux = *lista;
     NOH *novo = malloc(sizeof(NOH));
     novo->nome = malloc(strlen(nome) + 1);
     strcpy(novo->nome, nome);
-
-    if (indice == 0)
-    {
+    if (indice == 0){
         novo->prox = *lista;
         *lista = novo;
         return 1;
     }
-
-    while (aux->prox != NULL && indice > 1)
-    {
+    while (aux->prox != NULL && indice > 1){
         indice--;
         aux = aux->prox;
     }
@@ -30,7 +23,6 @@ int insere_pos(NOH **lista, int indice, const char *nome)
     aux->prox = novo;
     return 1;
 }
-
 void imprime(NOH* lista){
 
     if(lista==NULL)
@@ -46,7 +38,6 @@ int remove_valor(NOH** lista, const char* buscado) {
         printf("Lista vazia\n");
         return -1;
     }
-
     if (strcmp((*lista)->nome, buscado) == 0) {
         NOH* tmp = *lista;
         *lista = (*lista)->prox;
@@ -54,23 +45,25 @@ int remove_valor(NOH** lista, const char* buscado) {
         free(tmp);
         return 1;
     }
-
     NOH* atual = *lista;
     NOH* penultimo = NULL;
     while (atual != NULL && strcmp(atual->nome, buscado) != 0) {
         penultimo = atual;
         atual = atual->prox;
     }
-
     if (atual == NULL) {
         printf("Elemento %s não encontrado.\n", buscado);
         return -1;
     }
-
     penultimo->prox = atual->prox;
     free(atual->nome);
     free(atual);
     return 1;
+}
+void liberar_lista(NOH** lista) {
+    while (*lista != NULL) {
+        remover_inicio(lista);
+    }
 }
 int main()
 {
@@ -99,7 +92,6 @@ int main()
             scanf("%d", &pos);
             getchar();
             insere_pos(&lista, pos, nome);
-
             break;
         case 2:
             printf("\nLista de nomes:\n");
@@ -116,6 +108,7 @@ int main()
             remove_valor(&lista, nome);
             break;
         case 5:
+            liberar_lista(&lista);
             printf("Saindo...\n");
             break;
         default:
