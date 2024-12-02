@@ -5,6 +5,7 @@ typedef struct NOH{
     char *nome;
     struct NOH *prox;
 } NOH;
+
 int insere_pos(NOH **lista, int indice, const char *nome){
     NOH *aux = *lista;
     NOH *novo = malloc(sizeof(NOH));
@@ -23,16 +24,16 @@ int insere_pos(NOH **lista, int indice, const char *nome){
     aux->prox = novo;
     return 1;
 }
+
 void imprime(NOH* lista){
 
-    if(lista==NULL)
-        printf("Lista Vazia!");
-    else{
-        while(lista->prox!=NULL)
+    while(lista->prox != NULL){
             printf("%s",lista->nome);
             lista=lista->prox;
     }
 }
+
+
 int remove_valor(NOH** lista, const char* buscado) {
     if (*lista == NULL) {
         printf("Lista vazia\n");
@@ -58,6 +59,17 @@ int remove_valor(NOH** lista, const char* buscado) {
     penultimo->prox = atual->prox;
     free(atual->nome);
     free(atual);
+    return 1;
+}
+int remover_inicio(NOH** lista) {
+    if (*lista == NULL) {
+        printf("Lista vazia. Não há elemento para remover.\n");
+        return -1;
+    }
+    NOH* tmp = *lista;
+    *lista = (*lista)->prox;
+    free(tmp->nome);
+    free(tmp);
     return 1;
 }
 void liberar_lista(NOH** lista) {
@@ -86,7 +98,8 @@ int main()
         {
         case 1:
             printf("Digite o nome a ser inserido: ");
-            fgets(nome, sizeof(nome), stdin);
+            scanf("%s", &nome);
+            //fgets(nome, sizeof(nome), stdin);
             nome[strcspn(nome, "\n")] = '\0'; // Remover o caractere de nova linha
             printf("Digite a posição para inserir (0 para início): ");
             scanf("%d", &pos);
@@ -103,7 +116,8 @@ int main()
             break;
         case 4:
             printf("Digite o nome a ser removido: ");
-            fgets(nome, sizeof(nome), stdin);
+
+            //fgets(nome, sizeof(nome), stdin);
             nome[strcspn(nome, "\n")] = '\0';
             remove_valor(&lista, nome);
             break;
