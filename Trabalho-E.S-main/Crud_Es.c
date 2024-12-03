@@ -1,22 +1,26 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct NOH{
+typedef struct NOH
+{
     char *nome;
     struct NOH *prox;
 } NOH;
-
-int insere_pos(NOH **lista, int indice, const char *nome){
+int insere_pos(NOH **lista, int indice, const char *nome)
+{
     NOH *aux = *lista;
     NOH *novo = malloc(sizeof(NOH));
     novo->nome = malloc(strlen(nome) + 1);
     strcpy(novo->nome, nome);
-    if (indice == 0){
+    if (indice == 0)
+    {
         novo->prox = *lista;
         *lista = novo;
         return 1;
     }
-    while (aux->prox != NULL && indice > 1){
+    while (aux->prox != NULL && indice > 1)
+    {
         indice--;
         aux = aux->prox;
     }
@@ -24,36 +28,46 @@ int insere_pos(NOH **lista, int indice, const char *nome){
     aux->prox = novo;
     return 1;
 }
-
-void imprime(NOH* lista){
-
-    while(lista->prox != NULL){
-            printf("%s",lista->nome);
-            lista=lista->prox;
+void imprime(NOH *lista)
+{
+    if (lista == NULL)
+    {
+        printf("\nLISTA VAZIA\n");
+    }
+    else
+    {
+        while (lista!= NULL)
+        {
+            printf("%s\n", lista->nome);
+            lista = lista->prox;
+        }
     }
 }
-
-
-int remove_valor(NOH** lista, const char* buscado) {
-    if (*lista == NULL) {
+int remove_valor(NOH **lista, const char *buscado)
+{
+    if (*lista == NULL)
+    {
         printf("Lista vazia\n");
         return -1;
     }
-    if (strcmp((*lista)->nome, buscado) == 0) {
-        NOH* tmp = *lista;
+    if (strcmp((*lista)->nome, buscado) == 0)
+    {
+        NOH *tmp = *lista;
         *lista = (*lista)->prox;
         free(tmp->nome);
         free(tmp);
         return 1;
     }
-    NOH* atual = *lista;
-    NOH* penultimo = NULL;
-    while (atual != NULL && strcmp(atual->nome, buscado) != 0) {
+    NOH *atual = *lista;
+    NOH *penultimo = NULL;
+    while (atual != NULL && strcmp(atual->nome, buscado) != 0)
+    {
         penultimo = atual;
         atual = atual->prox;
     }
-    if (atual == NULL) {
-        printf("Elemento %s não encontrado.\n", buscado);
+    if (atual == NULL)
+    {
+        printf("Elemento %s nao encontrado.\n", buscado);
         return -1;
     }
     penultimo->prox = atual->prox;
@@ -61,21 +75,41 @@ int remove_valor(NOH** lista, const char* buscado) {
     free(atual);
     return 1;
 }
-int remover_inicio(NOH** lista) {
-    if (*lista == NULL) {
-        printf("Lista vazia. Não há elemento para remover.\n");
+int remover_inicio(NOH **lista)
+{
+    if (*lista == NULL)
+    {
+        printf("Lista vazia. nao tem elemento para remover.\n");
         return -1;
     }
-    NOH* tmp = *lista;
+    NOH *tmp = *lista;
     *lista = (*lista)->prox;
     free(tmp->nome);
     free(tmp);
     return 1;
 }
-void liberar_lista(NOH** lista) {
-    while (*lista != NULL) {
+void liberar_lista(NOH **lista)
+{
+    while (*lista != NULL)
+    {
         remover_inicio(lista);
     }
+}
+int atualiza_valor(NOH *lista, const char *antigo, const char *novo)
+{
+    while (lista != NULL)
+    {
+        if (strcmp(lista->nome, antigo) == 0)
+        {
+            free(lista->nome);
+            lista->nome = malloc(strlen(novo) + 1);
+            strcpy(lista->nome, novo);
+            return 1;
+        }
+        lista = lista->prox;
+    }
+    printf("Elemento %s n�o encontrado.\n", antigo);
+    return -1;
 }
 int main()
 {
@@ -91,17 +125,16 @@ int main()
         printf("3. Atualizar Nome (Update)\n");
         printf("4. Remover Nome (Delete)\n");
         printf("5. Sair\n");
-        printf("Escolha uma opção: ");
+        printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
         getchar();
         switch (opcao)
         {
         case 1:
             printf("Digite o nome a ser inserido: ");
-            scanf("%s", &nome);
-            //fgets(nome, sizeof(nome), stdin);
+            scanf("%s", nome);
             nome[strcspn(nome, "\n")] = '\0'; // Remover o caractere de nova linha
-            printf("Digite a posição para inserir (0 para início): ");
+            printf("Digite a posicao para inserir (0 para inicio): ");
             scanf("%d", &pos);
             getchar();
             insere_pos(&lista, pos, nome);
@@ -112,21 +145,26 @@ int main()
             break;
         case 3:
             printf("Digite o nome a ser atualizado: ");
-            scanf("%s",lista->nome);
+            scanf("%s", nome);
+            printf("Digite o novo nome: ");
+            fgets(novo_nome, sizeof(novo_nome), stdin);
+            novo_nome[strcspn(novo_nome, "\n")] = '\0';
+            atualiza_valor(lista, nome, novo_nome);
             break;
         case 4:
             printf("Digite o nome a ser removido: ");
-
-            //fgets(nome, sizeof(nome), stdin);
+            scanf("%s", nome);
             nome[strcspn(nome, "\n")] = '\0';
             remove_valor(&lista, nome);
+            if (remove_valor(&lista, nome) == 1)
+                printf("Nome removido com sucesso.\n");
             break;
         case 5:
             liberar_lista(&lista);
             printf("Saindo...\n");
             break;
         default:
-            printf("Opção inválida. Tente novamente.\n");
+            printf("Opcao invalida. Tente novamente.\n");
         }
     } while (opcao != 5);
     return 0;
